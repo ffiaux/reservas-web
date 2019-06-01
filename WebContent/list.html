@@ -1,0 +1,59 @@
+<html>
+	<head>	
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">  
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">  
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+		
+		<script>
+			String.prototype.format = function() 
+			{
+				var args = arguments;
+				return this.replace(/{(\d+)}/g, function(match, number) 
+				{	
+					return typeof args[number] != 'undefined' ? args[number] : match;
+				});
+			};
+		
+			$(document).ready( function () 
+			{
+				var table = $('#list').DataTable();
+				
+				$.ajax
+				({
+					dataType: "json",
+					url: "https://jsonplaceholder.typicode.com/todos",
+					type: "GET",
+					success: function (json)
+					{							
+						$.each(json, function(idx, obj) 
+						{					
+							/*var tr = "<tr>{0}{1}{2}</tr>"
+							var tdTitle = "<td>{0}</td>".format(obj.title);
+							var tdUrl = "<td>{0}</td>".format(obj.url);
+							var tdThumb = "<td>{0}</td>".format(obj.thumbnailUrl);
+							
+							tr = tr.format(tdTitle, tdUrl, tdThumb);
+							//$("#list tbody").append(tr);*/
+							
+							table.row.add([obj.userId, obj.id, obj.title, obj.completed]).draw(false);
+						});				
+					}
+				});				
+			
+			});		
+		</script>
+	</head>
+	<body>
+		<table id="list" class="display">
+			<thead>
+				<tr>
+					<th>useId</th>
+					<th>id</th>
+					<th>title</th>
+					<th>completed</th>
+				</tr>
+			</thead>
+		</table>
+	</body>
+</html>
