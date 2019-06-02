@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
 	<script src="https://cdn.dhtmlx.com/scheduler/edge/ext/dhtmlxscheduler_collision.js"></script>	
+	<script src="https://cdn.dhtmlx.com/scheduler/edge/ext/dhtmlxscheduler_limit.js"></script>	
+	<script src="https://cdn.dhtmlx.com/scheduler/edge/ext/dhtmlxscheduler_recurring.js"></script>	
     <link href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler_material.css" rel="stylesheet" type="text/css" charset="utf-8">
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <style>
@@ -268,13 +270,56 @@
 			{
 				return false;
 			}
+		});	
+
+		scheduler.attachEvent("onBeforeDrag", function (id, mode, e)
+		{
+			var ev = scheduler.getEvent(id); 
+			if (ev.is_break)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		});
+		
+		scheduler.attachEvent("onClick", function (id, e)
+		{
+			var ev = scheduler.getEvent(id);
+			if (ev.is_break)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		});		
+		
+		scheduler.attachEvent("onDblClick", function (id, e)
+		{
+			var ev = scheduler.getEvent(id);
+			if (ev.is_break)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		});			
 		
 		scheduler.attachEvent("onEventAdded", function(id, ev)
 		{
 			if (!ev.from_server)
 			{
 				alert("Adicionou agendamento, enviar dados por ajax");
+			}
+			else if (ev.is_break)
+			{
+				//ev.color = "gray";
 			}
 		});
 		
@@ -283,20 +328,77 @@
 			alert("Alterou agendamento, enviar dados por ajax");
 		});
 		
+		scheduler.attachEvent("onBeforeEventDelete", function(id,ev)
+		{
+			if (ev.is_break)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		});	
+		
 		scheduler.attachEvent("onEventDeleted", function(id, ev)
 		{
 			alert("Deletou agendamento, enviar dados por ajax");
 		});
-	
+				
 		scheduler.config.first_hour = 8;
 		scheduler.config.last_hour = 19;
 		scheduler.config.scroll_hour = new Date().getHours();
         scheduler.init('scheduler_here', new Date(), "week");
 		
+		scheduler.addEvent({
+			start_date: "27-05-2019 15:30",
+			end_date:   "27-05-2019 15:45",
+			text:   "Intervalo",
+			from_server: true,
+			is_break: true,
+			color: 'gray'
+		});
+
+		scheduler.addEvent({
+			start_date: "28-05-2019 15:30",
+			end_date:   "28-05-2019 15:45",
+			text:   "Intervalo",
+			from_server: true,
+			is_break: true,
+			color: 'gray'
+		});
+
+		scheduler.addEvent({
+			start_date: "29-05-2019 15:30",
+			end_date:   "29-05-2019 15:45",
+			text:   "Intervalo",
+			from_server: true,
+			is_break: true,
+			color: 'gray'
+		});
+
+		scheduler.addEvent({
+			start_date: "30-05-2019 15:30",
+			end_date:   "30-05-2019 15:45",
+			text:   "Intervalo",
+			from_server: true,
+			is_break: true,
+			color: 'gray'
+		});
+
+		scheduler.addEvent({
+			start_date: "31-05-2019 15:30",
+			end_date:   "31-05-2019 15:45",
+			text:   "Intervalo",
+			from_server: true,
+			is_break: true,
+			color: 'gray'
+		});				
+		
 		//addFromServer();
 		//readFromServer();
 		//loadFromServer();
-		readFromJSP();
+		readFromJSP();		
     </script>
 </body>
 </html>
